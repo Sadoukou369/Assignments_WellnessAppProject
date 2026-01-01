@@ -13,41 +13,80 @@
 
 # global dictionaries for meal and workout
 # keys are date - in string format - for now
-mealTracker = {} # each value is the calorie count for the meal
-workoutTracker = {} # each entry is the calorie count burned from the workout
+mealTracker = {}
+workoutTracker = {}
 
-# TODO: Create functions to add meal, add workout and search via date in the dictionary.
+def add_meal():
+    print("## Add Meal Entry ##")
+    date = input("Enter date of meal (MM/DD/YYYY): ")
+    details = input("Enter item details: ")
+    calories = int(input("Enter calories: "))
+
+    mealTracker[date] = {"items": details, "calories": calories}
+
+
+def add_workout():
+    print("## Add Workout Information ##")
+    date = input("Enter date of workout(MM/DD/YYYY): ")
+    details = input("Enter workout details: ")
+    burned = int(input("Enter calories burned: "))
+
+    # store in workoutTracker
+    workoutTracker[date] = {"details": details, "burned": burned}
+
+
+def search_date():
+    print("## Search for Entry ##")
+    searchDate = input("Enter date to search(MM/DD/YYYY): ")
+
+    print("\nMeals:")
+
+    if searchDate in mealTracker:
+        print("Meal Items:", mealTracker[searchDate]["items"])
+        print("Meal Calories:", mealTracker[searchDate]["calories"])
+        meal_cal = mealTracker[searchDate]["calories"]
+    else:
+        print("None")
+        meal_cal = 0
+
+    print("\nWorkout:")
+
+    if searchDate in workoutTracker:
+        print("Details:", workoutTracker[searchDate]["details"])
+        print("Calories Burned:", workoutTracker[searchDate]["burned"])
+        workout_cal = workoutTracker[searchDate]["burned"]
+    else:
+        print("None")
+        workout_cal = 0
+
+    difference = meal_cal - workout_cal
+
+    print(f"\nCalorie Difference: {difference:+}")
+
 
 def main():
-    # TODO: You need to make this system file loop for the menu until they exit.
-    # print menu - We will be adding to these as we go throughout the course
-    # Repeating Main Menu
     while True:
-     print("\n### Health and Wellness App ###")
-     print("1. Add Meal")
-     print("2. Add Workout")
-     print("3. Search Date")
-     print("4. Exit")
+        print("\n### Health and Wellness App ###")
+        print("1. Add Meal")
+        print("2. Add Workout")
+        print("3. Search Date")
+        print("4. Exit")
 
-    # get input
-     choice = int(input("Choose operation: "))
+        choice = int(input("Choose operation: "))
 
-    # TODO: You need to validate the choice operation input is between 1-4 using a while loop NOT just having else on the if/elif below.
-     while choice < 1 or choice > 4:
-          print("Invalid selection. Please choose a number between 1 and 4.")
-          choice = int(input("Choose operation: "))
+        while choice < 1 or choice > 4:
+            print("Invalid selection. Please choose a number between 1 and 4.")
+            choice = int(input("Choose operation: "))
 
-    # call other functions based on input - You need to do this
-    # TODO: You need to create other functions outside of main and call them here for each operation.
-     if choice == 1:
-        pass # Add meal function next time
-     elif choice == 2:
-        pass # Add workout function next time
-     elif choice == 3:
-        pass # Add Search function next time
-     elif choice == 4:
-        print("System Exitting...")
-        break # Exit the loop and end the program
+        if choice == 1:
+            add_meal()
+        elif choice == 2:
+            add_workout()
+        elif choice == 3:
+            search_date()
+        elif choice == 4:
+            print("System Exiting...")
+            break
 
 
 if __name__ == "__main__":
