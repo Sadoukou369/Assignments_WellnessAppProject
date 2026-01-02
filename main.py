@@ -16,53 +16,98 @@
 mealTracker = {}
 workoutTracker = {}
 
+from input_util import *
+import health_data as db
+
+
+# INPUT HELPERS
+
+def prompt_int(prompt):
+    while True:
+        value = get_int(input(prompt))
+
+        if value is not None:
+            return value
+
+        print("Error, enter a valid number.")
+
+
+def prompt_int_range(prompt, low, high):
+    while True:
+        value = get_int_range(input(prompt), low, high)
+
+        if value is not None:
+            return value
+
+        print(f"Error, enter a valid number between {low} and {high}.")
+
+
+def prompt_date(prompt):
+    while True:
+        value = get_date(input(prompt))
+
+        if value is not None:
+            return value
+
+        print("Error, enter a valid date.")
+
+
+# FEATURE FUNCTIONS
+
 def add_meal():
     print("## Add Meal Entry ##")
-    date = input("Enter date of meal (MM/DD/YYYY): ")
-    details = input("Enter item details: ")
-    calories = int(input("Enter calories: "))
+    meal_date = prompt_date("Enter date of meal(MM/DD/YYYY): ")
+    items = input("Enter item details: ")
+    calories = prompt_int("Enter calories: ")
 
-    mealTracker[date] = {"items": details, "calories": calories}
+    if db.add_meal(meal_date, {"items": items, "calories": calories}):
+        print("* Entry added in.")
+    else:
+        print("Error, date entry already added in, try modifying it.")
 
 
 def add_workout():
     print("## Add Workout Information ##")
-    date = input("Enter date of workout(MM/DD/YYYY): ")
+    workout_date = prompt_date("Enter date of workout(MM/DD/YYYY): ")
     details = input("Enter workout details: ")
-    burned = int(input("Enter calories burned: "))
+    burned = prompt_int("Enter calories burned: ")
 
-    # store in workoutTracker
-    workoutTracker[date] = {"details": details, "burned": burned}
+    if db.add_workout(workout_date, {"details": details, "calories": burned}):
+        print("* Workout added in.")
+    else:
+        print("Error, workout already added in, modify if needed.")
 
 
 def search_date():
     print("## Search for Entry ##")
-    searchDate = input("Enter date to search(MM/DD/YYYY): ")
+    search_date = prompt_date("Enter date to search(MM/DD/YYYY): ")
+
+    meal = db.get_meal(search_date)
+    workout = db.get_workout(search_date)
 
     print("\nMeals:")
-
-    if searchDate in mealTracker:
-        print("Meal Items:", mealTracker[searchDate]["items"])
-        print("Meal Calories:", mealTracker[searchDate]["calories"])
-        meal_cal = mealTracker[searchDate]["calories"]
-    else:
+    if meal is None:
         print("None")
         meal_cal = 0
+    else:
+        print("Meal Items:", meal["items"])
+        print("Meal Calories:", meal["calories"])
+        meal_cal = meal["calories"]
 
     print("\nWorkout:")
-
-    if searchDate in workoutTracker:
-        print("Details:", workoutTracker[searchDate]["details"])
-        print("Calories Burned:", workoutTracker[searchDate]["burned"])
-        workout_cal = workoutTracker[searchDate]["burned"]
-    else:
+    if workout is None:
         print("None")
         workout_cal = 0
+    else:
+        print("Details:", workout["details"])
+        print("Calories Burned:", workout["calories"])
+        workout_cal = workout["calories"]
 
     difference = meal_cal - workout_cal
-
     print(f"\nCalorie Difference: {difference:+}")
 
+
+# MAIN LOOP
 
 def main():
     while True:
@@ -72,11 +117,7 @@ def main():
         print("3. Search Date")
         print("4. Exit")
 
-        choice = int(input("Choose operation: "))
-
-        while choice < 1 or choice > 4:
-            print("Invalid selection. Please choose a number between 1 and 4.")
-            choice = int(input("Choose operation: "))
+        choice = prompt_int_range("Choose operation: ", 1, 4)
 
         if choice == 1:
             add_meal()
