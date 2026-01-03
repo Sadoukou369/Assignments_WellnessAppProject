@@ -10,105 +10,84 @@
 '''
 
 # This is the UI for the Health and Wellness system
-
-# global dictionaries for meal and workout
-# keys are date - in string format - for now
-mealTracker = {}
-workoutTracker = {}
-
 from input_util import *
 import health_data as db
-
-
-# INPUT HELPERS
+from models.CalorieEntity import Meal, Workout
 
 def prompt_int(prompt):
     while True:
         value = get_int(input(prompt))
-
         if value is not None:
             return value
-
         print("Error, enter a valid number.")
-
 
 def prompt_int_range(prompt, low, high):
     while True:
         value = get_int_range(input(prompt), low, high)
-
         if value is not None:
             return value
-
         print(f"Error, enter a valid number between {low} and {high}.")
-
 
 def prompt_date(prompt):
     while True:
         value = get_date(input(prompt))
-
         if value is not None:
             return value
-
         print("Error, enter a valid date.")
 
-
-# FEATURE FUNCTIONS
-
+# Function will be added next time
 def add_meal():
     print("## Add Meal Entry ##")
     meal_date = prompt_date("Enter date of meal(MM/DD/YYYY): ")
+
+    # Managing day, if does not exist create it
+    day = db.get_day(meal_date)
+    if day is None:
+        day = db.add_day(meal_date)
+
     items = input("Enter item details: ")
     calories = prompt_int("Enter calories: ")
 
-    if db.add_meal(meal_date, {"items": items, "calories": calories}):
+    # Creating Meal object
+    meal = Meal(items, calories)
+
+    if db.add_meal(meal_date, meal):
         print("* Entry added in.")
     else:
-        print("Error, date entry already added in, try modifying it.")
-
+        print("Error, could not add meal.")
 
 def add_workout():
     print("## Add Workout Information ##")
     workout_date = prompt_date("Enter date of workout(MM/DD/YYYY): ")
+
+    day = db.get_day(workout_date)
+    if day is None:
+        day = db.add_day(workout_date)
+
     details = input("Enter workout details: ")
     burned = prompt_int("Enter calories burned: ")
 
-    if db.add_workout(workout_date, {"details": details, "calories": burned}):
+    # Creating Workout object
+    workout = Workout(details, burned)
+
+    if db.add_workout(workout_date, workout):
         print("* Workout added in.")
     else:
-        print("Error, workout already added in, modify if needed.")
-
+        print("Error, could not add workout.")
 
 def search_date():
     print("## Search for Entry ##")
     search_date = prompt_date("Enter date to search(MM/DD/YYYY): ")
 
-    meal = db.get_meal(search_date)
-    workout = db.get_workout(search_date)
+    day = db.get_day(search_date)
 
-    print("\nMeals:")
-    if meal is None:
-        print("None")
-        meal_cal = 0
+    if day is None:
+        print("\nSorry, no date information found.")
     else:
-        print("Meal Items:", meal["items"])
-        print("Meal Calories:", meal["calories"])
-        meal_cal = meal["calories"]
+        print()
+        print(day)
 
-    print("\nWorkout:")
-    if workout is None:
-        print("None")
-        workout_cal = 0
-    else:
-        print("Details:", workout["details"])
-        print("Calories Burned:", workout["calories"])
-        workout_cal = workout["calories"]
-
-    difference = meal_cal - workout_cal
-    print(f"\nCalorie Difference: {difference:+}")
-
-
-# MAIN LOOP
-
+# Main Loop
 def main():
     while True:
         print("\n### Health and Wellness App ###")
@@ -128,7 +107,6 @@ def main():
         elif choice == 4:
             print("System Exiting...")
             break
-
 
 if __name__ == "__main__":
     main()

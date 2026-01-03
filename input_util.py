@@ -1,6 +1,6 @@
 from datetime import date
 
-# INTEGER VALIDATION
+# Integer Validation
 
 def get_int(num):
     try:
@@ -21,10 +21,10 @@ def get_int_range(num, low, high):
     return value
 
 
-# DATE VALIDATION
+# Date Validation
 
 def get_date(str_date):
-    # Format check: MM/DD/YYYY -> must be length 10 & slashes at 2 and 5
+    # Format check: MM/DD/YYYY must be length 10 and slashes at 2 and 5
     if len(str_date) != 10 or str_date[2] != "/" or str_date[5] != "/":
         return None
 
