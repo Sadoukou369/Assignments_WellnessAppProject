@@ -4,7 +4,8 @@ class HealthEntry:
     def __init__(self, description: str, calories: int):
         """Initialize with description and calories."""
         self._description = description
-        self.calories = calories  # Uses setter for validation
+        # Use property setter for validation
+        self.calories = calories
 
     @property
     def description(self) -> str:
