@@ -1,50 +1,74 @@
-class Meal:
-    def __init__(self, items: str, calories: int):
-        self.__items = items
-        self.__calories = calories
+from models.HealthEntry import HealthEntry
+from enum import Enum
+
+
+class MealType(Enum):
+    """Enumeration for meal types."""
+    Beakfast = "Breakfast"
+    Lunch = "Lunch"
+    Dinner = "Dinner"
+    Snack = "Snack"
+
+
+class WorkoutType(Enum):
+    """Enumeration for workout types."""
+    Cardio = "Cardio"
+    Strength = "Strength"
+    Flexibility = "Flexibility"
+    High_Intensity_Interval = "High Intensity Interval"
+    Group_Fitness_Class = "Group Fitness Class"
+    Other = "Other"
+
+
+class Meal(HealthEntry):
+    """Represents a meal entry with type classification."""
+
+    def __init__(self, description: str, calories: int, meal_type: MealType):
+        """Initialize meal with type."""
+        super().__init__(description, calories)
+        self._meal_type = meal_type
 
     @property
-    def items(self) -> str:
-        return self.__items
+    def meal_type(self) -> MealType:
+        """Get the meal type."""
+        return self._meal_type
 
-    @items.setter
-    def items(self, value: str):
-        self.__items = value
+    @meal_type.setter
+    def meal_type(self, value: MealType):
+        """Set the meal type."""
+        self._meal_type = value
 
-    @property
-    def calories(self) -> int:
-        return self.__calories
+    def __str__(self) -> str:
+        """String representation of meal."""
+        return f"{super().base_string()}, Type: {self._meal_type.value}"
 
-    @calories.setter
-    def calories(self, value: int):
-        if value > 0:
-            self.__calories = value
-
-    def __str__(self):
-        return f"Meal/Items: {self.__items}, Calories Consumed: {self.__calories}"
+    def get_type_display_name(self) -> str:
+        """Get the display name of the meal type."""
+        return self._meal_type.value
 
 
-class Workout:
-    def __init__(self, details: str, calories: int):
-        self.__details = details
-        self.__calories = calories
+class Workout(HealthEntry):
+    """Represents a workout entry with type classification."""
 
-    @property
-    def details(self) -> str:
-        return self.__details
-
-    @details.setter
-    def details(self, value: str):
-        self.__details = value
+    def __init__(self, description: str, calories: int, workout_type: WorkoutType):
+        """Initialize workout with type."""
+        super().__init__(description, calories)
+        self._workout_type = workout_type
 
     @property
-    def calories(self) -> int:
-        return self.__calories
+    def workout_type(self) -> WorkoutType:
+        """Get the workout type."""
+        return self._workout_type
 
-    @calories.setter
-    def calories(self, value: int):
-        if value > 0:
-            self.__calories = value
+    @workout_type.setter
+    def workout_type(self, value: WorkoutType):
+        """Set the workout type."""
+        self._workout_type = value
 
-    def __str__(self):
-        return f"Workout: {self.__details}, Calories Burned: {self.__calories}"
+    def __str__(self) -> str:
+        """String representation of workout."""
+        return f"{super().base_string()}, Type: {self._workout_type.value}"
+
+    def get_type_display_name(self) -> str:
+        """Get the display name of the workout type."""
+        return self._workout_type.value

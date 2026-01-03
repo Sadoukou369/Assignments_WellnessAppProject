@@ -1,7 +1,6 @@
 from datetime import date
 from models.CalorieEntity import Meal, Workout
 
-
 class Day:
     def __init__(self, day_date: date):
         self.__date = day_date

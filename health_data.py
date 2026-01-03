@@ -2,7 +2,7 @@ from models.DateEntity import Day
 from models.CalorieEntity import Meal, Workout
 from datetime import date
 
-# Using a dictionary to store Day objects
+# Dictionary for storing Day objects
 health_data = {}
 
 # Adding Day
