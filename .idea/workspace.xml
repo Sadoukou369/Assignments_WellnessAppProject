@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62e34c44-4271-40ef-8122-f913a4518a78" name="Changes" comment="Assignment2">
-      <change afterPath="$PROJECT_DIR$/models/HealthEntry.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/helpers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/health_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/health_data.py" afterDir="false" />
+    <list default="true" id="62e34c44-4271-40ef-8122-f913a4518a78" name="Changes" comment="Assignment4">
+      <change afterPath="$PROJECT_DIR$/models/EntryType.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/CalorieEntity.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/CalorieEntity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/DateEntity.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/DateEntity.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/HealthEntry.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/HealthEntry.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/__init__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,21 +69,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.CalorieEntity.executor": "Run",
-    "Python.DateEntity.executor": "Run",
-    "Python.health_data.executor": "Run",
-    "Python.input_util.executor": "Run",
-    "Python.main (1).executor": "Run",
-    "Python.main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Assignment4",
-    "last_opened_file_path": "/Users/kagambegasadoukou/Desktop/25WI_INFO_1501_WW /M1PythonProject Assignment_Wellness_App"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.CalorieEntity.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DateEntity.executor&quot;: &quot;Run&quot;,
+    &quot;Python.health_data.executor&quot;: &quot;Run&quot;,
+    &quot;Python.input_util.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Assignment4&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/kagambegasadoukou/Desktop/25WI_INFO_1501_WW /M1PythonProject Assignment_Wellness_App&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -165,7 +164,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767391610565</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Assignment4">
+      <option name="closed" value="true" />
+      <created>1767407271703</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1767407271703</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -173,6 +180,7 @@
     <MESSAGE value="Main Menu Setup" />
     <MESSAGE value="Initial code setup." />
     <MESSAGE value="Assignment2" />
-    <option name="LAST_COMMIT_MESSAGE" value="Assignment2" />
+    <MESSAGE value="Assignment4" />
+    <option name="LAST_COMMIT_MESSAGE" value="Assignment4" />
   </component>
 </project>

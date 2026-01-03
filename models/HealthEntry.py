@@ -1,7 +1,4 @@
-from abc import ABC, abstractmethod
-from enum import Enum
-
-class HealthEntry(ABC):
+class HealthEntry:
     """Base class for all health-related entries (Meal and Workout)."""
 
     def __init__(self, description: str, calories: int):
@@ -32,11 +29,6 @@ class HealthEntry(ABC):
         else:
             raise ValueError("Calories must be greater than 0")
 
-    @abstractmethod
     def __str__(self) -> str:
-        """Abstract method to be implemented by subclasses."""
-        pass
-
-    def base_string(self) -> str:
-        """Helper method for common string formatting."""
+        """String representation - to be overridden by subclasses."""
         return f"Entry: {self._description}, Calories: {self._calories}"

@@ -1,23 +1,5 @@
 from models.HealthEntry import HealthEntry
-from enum import Enum
-
-
-class MealType(Enum):
-    """Enumeration for meal types."""
-    Beakfast = "Breakfast"
-    Lunch = "Lunch"
-    Dinner = "Dinner"
-    Snack = "Snack"
-
-
-class WorkoutType(Enum):
-    """Enumeration for workout types."""
-    Cardio = "Cardio"
-    Strength = "Strength"
-    Flexibility = "Flexibility"
-    High_Intensity_Interval = "High Intensity Interval"
-    Group_Fitness_Class = "Group Fitness Class"
-    Other = "Other"
+from models.EntryType import MealType, WorkoutType
 
 
 class Meal(HealthEntry):
@@ -40,11 +22,11 @@ class Meal(HealthEntry):
 
     def __str__(self) -> str:
         """String representation of meal."""
-        return f"{super().base_string()}, Type: {self._meal_type.value}"
+        return f"Entry: {self._description}, Calories: {self._calories}, Type: {self._meal_type}"
 
     def get_type_display_name(self) -> str:
         """Get the display name of the meal type."""
-        return self._meal_type.value
+        return str(self._meal_type)
 
 
 class Workout(HealthEntry):
@@ -67,8 +49,8 @@ class Workout(HealthEntry):
 
     def __str__(self) -> str:
         """String representation of workout."""
-        return f"{super().base_string()}, Type: {self._workout_type.value}"
+        return f"Entry: {self._description}, Calories: {self._calories}, Type: {self._workout_type}"
 
     def get_type_display_name(self) -> str:
         """Get the display name of the workout type."""
-        return self._workout_type.value
+        return str(self._workout_type)
