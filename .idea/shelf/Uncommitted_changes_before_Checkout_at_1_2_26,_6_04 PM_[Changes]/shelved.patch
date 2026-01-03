@@ -1,0 +1,204 @@
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>'''\n    INFO 1501 - Python I\n    Welcome to the Health and Wellness System\n    You will be working on this throughout the course and adding to it\n\n    Please read instructions for each assignment clearly and don't go beyond the functionality\n    required as we will be adding more each week.\n\n    Make sure to merge branches and create new branches for each week's assignment.\n'''\n\n# This is the UI for the Health and Wellness system\n\n# global dictionaries for meal and workout\n# keys are date - in string format - for now\nmealTracker = {}\nworkoutTracker = {}\n\nfrom input_util import *\nimport health_data as db\n\n\n# INPUT HELPERS\n\ndef prompt_int(prompt):\n    while True:\n        value = get_int(input(prompt))\n\n        if value is not None:\n            return value\n\n        print(\"Error, enter a valid number.\")\n\n\ndef prompt_int_range(prompt, low, high):\n    while True:\n        value = get_int_range(input(prompt), low, high)\n\n        if value is not None:\n            return value\n\n        print(f\"Error, enter a valid number between {low} and {high}.\")\n\n\ndef prompt_date(prompt):\n    while True:\n        value = get_date(input(prompt))\n\n        if value is not None:\n            return value\n\n        print(\"Error, enter a valid date.\")\n\n\n# FEATURE FUNCTIONS\n\ndef add_meal():\n    print(\"## Add Meal Entry ##\")\n    meal_date = prompt_date(\"Enter date of meal(MM/DD/YYYY): \")\n    items = input(\"Enter item details: \")\n    calories = prompt_int(\"Enter calories: \")\n\n    if db.add_meal(meal_date, {\"items\": items, \"calories\": calories}):\n        print(\"* Entry added in.\")\n    else:\n        print(\"Error, date entry already added in, try modifying it.\")\n\n\ndef add_workout():\n    print(\"## Add Workout Information ##\")\n    workout_date = prompt_date(\"Enter date of workout(MM/DD/YYYY): \")\n    details = input(\"Enter workout details: \")\n    burned = prompt_int(\"Enter calories burned: \")\n\n    if db.add_workout(workout_date, {\"details\": details, \"calories\": burned}):\n        print(\"* Workout added in.\")\n    else:\n        print(\"Error, workout already added in, modify if needed.\")\n\n\ndef search_date():\n    print(\"## Search for Entry ##\")\n    search_date = prompt_date(\"Enter date to search(MM/DD/YYYY): \")\n\n    meal = db.get_meal(search_date)\n    workout = db.get_workout(search_date)\n\n    print(\"\\nMeals:\")\n    if meal is None:\n        print(\"None\")\n        meal_cal = 0\n    else:\n        print(\"Meal Items:\", meal[\"items\"])\n        print(\"Meal Calories:\", meal[\"calories\"])\n        meal_cal = meal[\"calories\"]\n\n    print(\"\\nWorkout:\")\n    if workout is None:\n        print(\"None\")\n        workout_cal = 0\n    else:\n        print(\"Details:\", workout[\"details\"])\n        print(\"Calories Burned:\", workout[\"calories\"])\n        workout_cal = workout[\"calories\"]\n\n    difference = meal_cal - workout_cal\n    print(f\"\\nCalorie Difference: {difference:+}\")\n\n\n# MAIN LOOP\n\ndef main():\n    while True:\n        print(\"\\n### Health and Wellness App ###\")\n        print(\"1. Add Meal\")\n        print(\"2. Add Workout\")\n        print(\"3. Search Date\")\n        print(\"4. Exit\")\n\n        choice = prompt_int_range(\"Choose operation: \", 1, 4)\n\n        if choice == 1:\n            add_meal()\n        elif choice == 2:\n            add_workout()\n        elif choice == 3:\n            search_date()\n        elif choice == 4:\n            print(\"System Exiting...\")\n            break\n\n\nif __name__ == \"__main__\":\n    main()
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.py b/main.py
+--- a/main.py	(revision 8c0367082298658fc8e307bdb7aec82f7fd1986e)
++++ b/main.py	(date 1767398628648)
+@@ -52,7 +52,7 @@
+         print("Error, enter a valid date.")
+ 
+ 
+-# FEATURE FUNCTIONS
++# FUNCTIONS we'll create next time
+ 
+ def add_meal():
+     print("## Add Meal Entry ##")
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"62e34c44-4271-40ef-8122-f913a4518a78\" name=\"Changes\" comment=\"\" />\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"ProjectColorInfo\"><![CDATA[{\n  \"associatedIndex\": 7\n}]]></component>\n  <component name=\"ProjectId\" id=\"375emSXkxMmFpGCutR6n4uCN5uR\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\"><![CDATA[{\n  \"keyToString\": {\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\"\n  }\n}]]></component>\n  <component name=\"SharedIndexes\">\n    <attachedChunks>\n      <set>\n        <option value=\"bundled-python-sdk-a101402ee41c-968fe969f28a-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.28238.29\" />\n      </set>\n    </attachedChunks>\n  </component>\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"62e34c44-4271-40ef-8122-f913a4518a78\" name=\"Changes\" comment=\"\" />\n      <created>1766197517452</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1766197517452</updated>\n    </task>\n    <servers />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 8c0367082298658fc8e307bdb7aec82f7fd1986e)
++++ b/.idea/workspace.xml	(date 1767398628650)
+@@ -1,15 +1,72 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="AutoImportSettings">
++    <option name="autoReloadType" value="SELECTIVE" />
++  </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="62e34c44-4271-40ef-8122-f913a4518a78" name="Changes" comment="" />
++    <list default="true" id="62e34c44-4271-40ef-8122-f913a4518a78" name="Changes" comment="Assignment2">
++      <change afterPath="$PROJECT_DIR$/models/CalorieEntities.py" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/models/DayEntity.py" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/models/__init__.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/health_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/health_data.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/input_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/input_util.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/main (1).py" beforeDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+     <option name="LAST_RESOLUTION" value="IGNORE" />
+   </component>
+-  <component name="ProjectColorInfo"><![CDATA[{
+-  "associatedIndex": 7
+-}]]></component>
++  <component name="FileTemplateManagerImpl">
++    <option name="RECENT_TEMPLATES">
++      <list>
++        <option value="Python Script" />
++      </list>
++    </option>
++  </component>
++  <component name="Git.Settings">
++    <favorite-branches>
++      <branch-storage>
++        <map>
++          <entry type="LOCAL">
++            <value>
++              <list>
++                <branch-info repo="$PROJECT_DIR$" source="Assignment2" />
++              </list>
++            </value>
++          </entry>
++        </map>
++      </branch-storage>
++    </favorite-branches>
++    <option name="PUSH_TAGS">
++      <GitPushTagMode>
++        <option name="argument" value="--tags" />
++        <option name="title" value="All" />
++      </GitPushTagMode>
++    </option>
++    <option name="RECENT_BRANCH_BY_REPOSITORY">
++      <map>
++        <entry key="$PROJECT_DIR$" value="Assignment2" />
++      </map>
++    </option>
++    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
++  </component>
++  <component name="GitHubPullRequestSearchHistory">{
++  &quot;lastFilter&quot;: {
++    &quot;state&quot;: &quot;OPEN&quot;,
++    &quot;assignee&quot;: &quot;Sadoukou369&quot;
++  }
++}</component>
++  <component name="GithubPullRequestsUISettings">{
++  &quot;selectedUrlAndAccountId&quot;: {
++    &quot;url&quot;: &quot;https://github.com/Sadoukou369/Assignments_WellnessAppProject.git&quot;,
++    &quot;accountId&quot;: &quot;75c181a8-1601-4c42-92b6-673cb593415a&quot;
++  }
++}</component>
++  <component name="ProjectColorInfo">{
++  &quot;associatedIndex&quot;: 7
++}</component>
+   <component name="ProjectId" id="375emSXkxMmFpGCutR6n4uCN5uR" />
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+@@ -17,9 +74,24 @@
+   </component>
+   <component name="PropertiesComponent"><![CDATA[{
+   "keyToString": {
+-    "RunOnceActivity.ShowReadmeOnStart": "true"
++    "ModuleVcsDetector.initialDetectionPerformed": "true",
++    "Python.main (1).executor": "Run",
++    "Python.main.executor": "Run",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "RunOnceActivity.git.unshallow": "true",
++    "git-widget-placeholder": "master",
++    "last_opened_file_path": "/Users/kagambegasadoukou/Desktop/25WI_INFO_1501_WW /M1PythonProject Assignment_Wellness_App"
+   }
+ }]]></component>
++  <component name="RecentsManager">
++    <key name="CopyFile.RECENT_KEYS">
++      <recent name="$PROJECT_DIR$" />
++    </key>
++    <key name="MoveFile.RECENT_KEYS">
++      <recent name="$PROJECT_DIR$/.venv" />
++      <recent name="$PROJECT_DIR$/models" />
++    </key>
++  </component>
+   <component name="SharedIndexes">
+     <attachedChunks>
+       <set>
+@@ -35,6 +107,70 @@
+       <option name="presentableId" value="Default" />
+       <updated>1766197517452</updated>
+     </task>
++    <task id="LOCAL-00001" summary="Project Setup.">
++      <option name="closed" value="true" />
++      <created>1766197732472</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1766197732472</updated>
++    </task>
++    <task id="LOCAL-00002" summary="Main Menu Setup">
++      <option name="closed" value="true" />
++      <created>1766198115634</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1766198115634</updated>
++    </task>
++    <task id="LOCAL-00003" summary="Initial code setup.">
++      <option name="closed" value="true" />
++      <created>1766202246858</created>
++      <option name="number" value="00003" />
++      <option name="presentableId" value="LOCAL-00003" />
++      <option name="project" value="LOCAL" />
++      <updated>1766202246858</updated>
++    </task>
++    <task id="LOCAL-00004" summary="Initial code setup.">
++      <option name="closed" value="true" />
++      <created>1766972603851</created>
++      <option name="number" value="00004" />
++      <option name="presentableId" value="LOCAL-00004" />
++      <option name="project" value="LOCAL" />
++      <updated>1766972603851</updated>
++    </task>
++    <task id="LOCAL-00005" summary="Initial code setup.">
++      <option name="closed" value="true" />
++      <created>1767294027852</created>
++      <option name="number" value="00005" />
++      <option name="presentableId" value="LOCAL-00005" />
++      <option name="project" value="LOCAL" />
++      <updated>1767294027852</updated>
++    </task>
++    <task id="LOCAL-00006" summary="Assignment2">
++      <option name="closed" value="true" />
++      <created>1767333473334</created>
++      <option name="number" value="00006" />
++      <option name="presentableId" value="LOCAL-00006" />
++      <option name="project" value="LOCAL" />
++      <updated>1767333473334</updated>
++    </task>
++    <task id="LOCAL-00007" summary="Assignment2">
++      <option name="closed" value="true" />
++      <created>1767391610564</created>
++      <option name="number" value="00007" />
++      <option name="presentableId" value="LOCAL-00007" />
++      <option name="project" value="LOCAL" />
++      <updated>1767391610565</updated>
++    </task>
++    <option name="localTasksCounter" value="8" />
+     <servers />
+   </component>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value="Project Setup." />
++    <MESSAGE value="Main Menu Setup" />
++    <MESSAGE value="Initial code setup." />
++    <MESSAGE value="Assignment2" />
++    <option name="LAST_COMMIT_MESSAGE" value="Assignment2" />
++  </component>
+ </project>
+\ No newline at end of file

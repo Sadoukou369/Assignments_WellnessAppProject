@@ -1,0 +1,381 @@
+Index: health_data.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># dictionaries moved here\nmeal_tracker = {}\nworkout_tracker = {}\n\n# ADDING ENTRIES\n\ndef add_meal(meal_date, meal):\n    if meal_date in meal_tracker:\n        return False\n\n    meal_tracker[meal_date] = meal\n    return True\n\n\ndef add_workout(workout_date, workout):\n    if workout_date in workout_tracker:\n        return False\n\n    workout_tracker[workout_date] = workout\n    return True\n\n\n# SEARCHING ENTRIES\n\ndef get_meal(meal_date):\n    if meal_date in meal_tracker:\n        return meal_tracker[meal_date]\n    return None\n\n\ndef get_workout(workout_date):\n    if workout_date in workout_tracker:\n        return workout_tracker[workout_date]\n    return None\n\n\n# optional helper\ndef get_entry(entry_date):\n    return get_meal(entry_date), get_workout(entry_date)\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/health_data.py b/health_data.py
+--- a/health_data.py	(revision f60607b5e374c3784c9f2e73c8dd1645247a1efc)
++++ b/health_data.py	(date 1767393312096)
+@@ -36,4 +36,4 @@
+ 
+ # optional helper
+ def get_entry(entry_date):
+-    return get_meal(entry_date), get_workout(entry_date)
++    return get_meal(entry_date), get_workout(entry_date)
+\ No newline at end of file
+Index: input_util.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from datetime import date\n\n# INTEGER VALIDATION\n\ndef get_int(num):\n    try:\n        return int(num)\n    except:\n        return None\n\n\ndef get_int_range(num, low, high):\n    value = get_int(num)\n\n    if value is None:\n        return None\n\n    if value < low or value > high:\n        return None\n\n    return value\n\n\n# DATE VALIDATION\n\ndef get_date(str_date):\n    # Format check: MM/DD/YYYY -> must be length 10 & slashes at 2 and 5\n    if len(str_date) != 10 or str_date[2] != \"/\" or str_date[5] != \"/\":\n        return None\n\n    parts = str_date.split(\"/\")\n\n    if len(parts) != 3:\n        return None\n\n    month = get_int(parts[0])\n    day = get_int(parts[1])\n    year = get_int(parts[2])\n\n    if month is None or day is None or year is None:\n        return None\n\n    try:\n        return date(year, month, day)\n    except:\n        return None\n\n\nif __name__ == \"__main__\":\n    pass\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/input_util.py b/input_util.py
+--- a/input_util.py	(revision f60607b5e374c3784c9f2e73c8dd1645247a1efc)
++++ b/input_util.py	(date 1767393284851)
+@@ -47,4 +47,4 @@
+ 
+ 
+ if __name__ == "__main__":
+-    pass
++    pass
+\ No newline at end of file
+Index: main (1).py
+===================================================================
+diff --git a/main (1).py b/main (1).py
+deleted file mode 100644
+--- a/main (1).py	(revision f60607b5e374c3784c9f2e73c8dd1645247a1efc)
++++ /dev/null	(revision f60607b5e374c3784c9f2e73c8dd1645247a1efc)
+@@ -1,48 +0,0 @@
+-'''
+-    INFO 1501 - Python I
+-    Welcome to the Health and Wellness System
+-    You will be working on this throughout the course and adding to it
+-
+-    Please read instructions for each assignment clearly and don't go beyond the functionality
+-    required as we will be adding more each week.
+-
+-    Make sure to merge branches and create new branches for each week's assignment.
+-'''
+-
+-# This is the UI for the Health and Wellness system
+-
+-# global dictionaries for meal and workout
+-# keys are date - in string format - for now
+-mealTracker = {} # each value is the calorie count for the meal
+-workoutTracker = {} # each entry is the calorie count burned from the workout
+-
+-# TODO: Create functions to add meal, add workout and search via date in the dictionary.
+-
+-def main():
+-    # TODO: You need to make this system file loop for the menu until they exit.
+-    # print menu - We will be adding to these as we go throughout the course
+-    print("### Health and Wellness App ###")
+-    print("1. Add Meal")
+-    print("2. Add Workout")
+-    print("3. Search Date")
+-    print("4. Exit")
+-
+-    # get input
+-    choice = int(input("Choose operation: "))
+-
+-    # TODO: You need to validate the choice operation input is between 1-4 using a while loop NOT just having else on the if/elif below.
+-
+-    # call other functions based on input - You need to do this
+-    # TODO: You need to create other functions outside of main and call them here for each operation.
+-    if choice == 1:
+-        pass
+-    elif choice == 2:
+-        pass
+-    elif choice == 3:
+-        pass
+-    elif choice == 4:
+-        print("System Exitting...")
+-
+-
+-if __name__ == "__main__":
+-    main()
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"62e34c44-4271-40ef-8122-f913a4518a78\" name=\"Changes\" comment=\"\" />\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"ProjectColorInfo\"><![CDATA[{\n  \"associatedIndex\": 7\n}]]></component>\n  <component name=\"ProjectId\" id=\"375emSXkxMmFpGCutR6n4uCN5uR\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\"><![CDATA[{\n  \"keyToString\": {\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\"\n  }\n}]]></component>\n  <component name=\"SharedIndexes\">\n    <attachedChunks>\n      <set>\n        <option value=\"bundled-python-sdk-a101402ee41c-968fe969f28a-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.28238.29\" />\n      </set>\n    </attachedChunks>\n  </component>\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"62e34c44-4271-40ef-8122-f913a4518a78\" name=\"Changes\" comment=\"\" />\n      <created>1766197517452</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1766197517452</updated>\n    </task>\n    <servers />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision f60607b5e374c3784c9f2e73c8dd1645247a1efc)
++++ b/.idea/workspace.xml	(date 1767393087539)
+@@ -1,15 +1,71 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="AutoImportSettings">
++    <option name="autoReloadType" value="SELECTIVE" />
++  </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="62e34c44-4271-40ef-8122-f913a4518a78" name="Changes" comment="" />
++    <list default="true" id="62e34c44-4271-40ef-8122-f913a4518a78" name="Changes" comment="Assignment2">
++      <change afterPath="$PROJECT_DIR$/CalorieEntities.py" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/DayEntity.py" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/models/__init__.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/main (1).py" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+     <option name="LAST_RESOLUTION" value="IGNORE" />
+   </component>
+-  <component name="ProjectColorInfo"><![CDATA[{
+-  "associatedIndex": 7
+-}]]></component>
++  <component name="FileTemplateManagerImpl">
++    <option name="RECENT_TEMPLATES">
++      <list>
++        <option value="Python Script" />
++      </list>
++    </option>
++  </component>
++  <component name="Git.Settings">
++    <favorite-branches>
++      <branch-storage>
++        <map>
++          <entry type="LOCAL">
++            <value>
++              <list>
++                <branch-info repo="$PROJECT_DIR$" source="Assignment2" />
++              </list>
++            </value>
++          </entry>
++        </map>
++      </branch-storage>
++    </favorite-branches>
++    <option name="PUSH_TAGS">
++      <GitPushTagMode>
++        <option name="argument" value="--tags" />
++        <option name="title" value="All" />
++      </GitPushTagMode>
++    </option>
++    <option name="RECENT_BRANCH_BY_REPOSITORY">
++      <map>
++        <entry key="$PROJECT_DIR$" value="Assignment2" />
++      </map>
++    </option>
++    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
++  </component>
++  <component name="GitHubPullRequestSearchHistory">{
++  &quot;lastFilter&quot;: {
++    &quot;state&quot;: &quot;OPEN&quot;,
++    &quot;assignee&quot;: &quot;Sadoukou369&quot;
++  }
++}</component>
++  <component name="GithubPullRequestsUISettings">{
++  &quot;selectedUrlAndAccountId&quot;: {
++    &quot;url&quot;: &quot;https://github.com/Sadoukou369/Assignments_WellnessAppProject.git&quot;,
++    &quot;accountId&quot;: &quot;75c181a8-1601-4c42-92b6-673cb593415a&quot;
++  }
++}</component>
++  <component name="ProjectColorInfo">{
++  &quot;associatedIndex&quot;: 7
++}</component>
+   <component name="ProjectId" id="375emSXkxMmFpGCutR6n4uCN5uR" />
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+@@ -17,7 +73,12 @@
+   </component>
+   <component name="PropertiesComponent"><![CDATA[{
+   "keyToString": {
+-    "RunOnceActivity.ShowReadmeOnStart": "true"
++    "ModuleVcsDetector.initialDetectionPerformed": "true",
++    "Python.main (1).executor": "Run",
++    "Python.main.executor": "Run",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "RunOnceActivity.git.unshallow": "true",
++    "git-widget-placeholder": "master"
+   }
+ }]]></component>
+   <component name="SharedIndexes">
+@@ -35,6 +96,62 @@
+       <option name="presentableId" value="Default" />
+       <updated>1766197517452</updated>
+     </task>
++    <task id="LOCAL-00001" summary="Project Setup.">
++      <option name="closed" value="true" />
++      <created>1766197732472</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1766197732472</updated>
++    </task>
++    <task id="LOCAL-00002" summary="Main Menu Setup">
++      <option name="closed" value="true" />
++      <created>1766198115634</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1766198115634</updated>
++    </task>
++    <task id="LOCAL-00003" summary="Initial code setup.">
++      <option name="closed" value="true" />
++      <created>1766202246858</created>
++      <option name="number" value="00003" />
++      <option name="presentableId" value="LOCAL-00003" />
++      <option name="project" value="LOCAL" />
++      <updated>1766202246858</updated>
++    </task>
++    <task id="LOCAL-00004" summary="Initial code setup.">
++      <option name="closed" value="true" />
++      <created>1766972603851</created>
++      <option name="number" value="00004" />
++      <option name="presentableId" value="LOCAL-00004" />
++      <option name="project" value="LOCAL" />
++      <updated>1766972603851</updated>
++    </task>
++    <task id="LOCAL-00005" summary="Initial code setup.">
++      <option name="closed" value="true" />
++      <created>1767294027852</created>
++      <option name="number" value="00005" />
++      <option name="presentableId" value="LOCAL-00005" />
++      <option name="project" value="LOCAL" />
++      <updated>1767294027852</updated>
++    </task>
++    <task id="LOCAL-00006" summary="Assignment2">
++      <option name="closed" value="true" />
++      <created>1767333473334</created>
++      <option name="number" value="00006" />
++      <option name="presentableId" value="LOCAL-00006" />
++      <option name="project" value="LOCAL" />
++      <updated>1767333473334</updated>
++    </task>
++    <option name="localTasksCounter" value="7" />
+     <servers />
+   </component>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value="Project Setup." />
++    <MESSAGE value="Main Menu Setup" />
++    <MESSAGE value="Initial code setup." />
++    <MESSAGE value="Assignment2" />
++    <option name="LAST_COMMIT_MESSAGE" value="Assignment2" />
++  </component>
+ </project>
+\ No newline at end of file
+Index: models/DayEntity.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/models/DayEntity.py b/models/DayEntity.py
+new file mode 100644
+--- /dev/null	(date 1767393087531)
++++ b/models/DayEntity.py	(date 1767393087531)
+@@ -0,0 +1,53 @@
++from models.CalorieEntities import Meal, Workout
++
++
++class Day:
++    def __init__(self, date):
++        self.__date = date
++        self.__meals = []
++        self.__workouts = []
++
++    @property
++    def date(self):
++        return self.__date
++
++    def add_meal(self, meal: Meal):
++        self.__meals.append(meal)
++
++    def add_workout(self, workout: Workout):
++        self.__workouts.append(workout)
++
++    def meal_calories(self):
++        total = 0
++        for m in self.__meals:
++            total += m.calories
++        return total
++
++    def workout_calories(self):
++        total = 0
++        for w in self.__workouts:
++            total += w.burned
++        return total
++
++    def net_calories(self):
++        return self.meal_calories() - self.workout_calories()
++
++    def meals_to_string(self):
++        s = ""
++        for m in self.__meals:
++            s += "\t" + str(m) + "\n"
++        return s
++
++    def workouts_to_string(self):
++        s = ""
++        for w in self.__workouts:
++            s += "\t" + str(w) + "\n"
++        return s
++
++    def __str__(self):
++        return (
++            f"Date: {self.__date}\n"
++            f"Meals:\n{self.meals_to_string()}"
++            f"Workouts:\n{self.workouts_to_string()}\n"
++            f"Net Calories: {self.net_calories()}\n"
++        )
+\ No newline at end of file
+Index: models/CalorieEntities.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/models/CalorieEntities.py b/models/CalorieEntities.py
+new file mode 100644
+--- /dev/null	(date 1767393087536)
++++ b/models/CalorieEntities.py	(date 1767393087536)
+@@ -0,0 +1,50 @@
++class Meal:
++    def __init__(self, items, calories):
++        self.__items = items
++        self.calories = calories
++
++    @property
++    def items(self):
++        return self.__items
++
++    @items.setter
++    def items(self, value):
++        self.__items = value
++
++    @property
++    def calories(self):
++        return self.__calories
++
++    @calories.setter
++    def calories(self, value):
++        if value > 0:
++            self.__calories = value
++
++    def __str__(self):
++        return f"Meal/Items: {self.__items}, Calories Consumed: {self.__calories}"
++
++
++class Workout:
++    def __init__(self, details, burned):
++        self.__details = details
++        self.burned = burned
++
++    @property
++    def details(self):
++        return self.__details
++
++    @details.setter
++    def details(self, value):
++        self.__details = value
++
++    @property
++    def burned(self):
++        return self.__burned
++
++    @burned.setter
++    def burned(self, value):
++        if value > 0:
++            self.__burned = value
++
++    def __str__(self):
++        return f"Workout: {self.__details}, Calories Burned: {self.__burned}"
+\ No newline at end of file
+diff --git a/models/__init__.py b/models/__init__.py
+new file mode 100644
