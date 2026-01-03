@@ -1,39 +1,35 @@
-# dictionaries moved here
-meal_tracker = {}
-workout_tracker = {}
+from models.DateEntity import Day
+from models.CalorieEntity import Meal, Workout
+from datetime import date
 
-# ADDING ENTRIES
+# Using a dictionary to store Day objects
+health_data = {}
 
-def add_meal(meal_date, meal):
-    if meal_date in meal_tracker:
-        return False
+# Adding Day
+def add_day(day_date: date):
+    if day_date in health_data:
+        return None
+    new_day = Day(day_date)
+    health_data[day_date] = new_day
+    return new_day
 
-    meal_tracker[meal_date] = meal
-    return True
+# Adding Entries
+def add_meal(meal_date: date, meal: Meal):
+    if meal_date in health_data:
+        day = health_data[meal_date]
+        day.add_meal(meal)
+        return True
+    return False
 
+def add_workout(workout_date: date, workout: Workout):
+    if workout_date in health_data:
+        day = health_data[workout_date]
+        day.add_workout(workout)
+        return True
+    return False
 
-def add_workout(workout_date, workout):
-    if workout_date in workout_tracker:
-        return False
-
-    workout_tracker[workout_date] = workout
-    return True
-
-
-# SEARCHING ENTRIES
-
-def get_meal(meal_date):
-    if meal_date in meal_tracker:
-        return meal_tracker[meal_date]
+# Searching Entries
+def get_day(entry_date: date):
+    if entry_date in health_data:
+        return health_data[entry_date]
     return None
-
-
-def get_workout(workout_date):
-    if workout_date in workout_tracker:
-        return workout_tracker[workout_date]
-    return None
-
-
-# optional helper
-def get_entry(entry_date):
-    return get_meal(entry_date), get_workout(entry_date)

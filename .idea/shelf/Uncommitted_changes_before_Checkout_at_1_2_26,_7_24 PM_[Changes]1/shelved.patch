@@ -1,0 +1,611 @@
+Index: health_data.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># dictionaries moved here\nmeal_tracker = {}\nworkout_tracker = {}\n\n# ADDING ENTRIES\n\ndef add_meal(meal_date, meal):\n    if meal_date in meal_tracker:\n        return False\n\n    meal_tracker[meal_date] = meal\n    return True\n\n\ndef add_workout(workout_date, workout):\n    if workout_date in workout_tracker:\n        return False\n\n    workout_tracker[workout_date] = workout\n    return True\n\n\n# SEARCHING ENTRIES\n\ndef get_meal(meal_date):\n    if meal_date in meal_tracker:\n        return meal_tracker[meal_date]\n    return None\n\n\ndef get_workout(workout_date):\n    if workout_date in workout_tracker:\n        return workout_tracker[workout_date]\n    return None\n\n\n# optional helper\ndef get_entry(entry_date):\n    return get_meal(entry_date), get_workout(entry_date)\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/health_data.py b/health_data.py
+--- a/health_data.py	(revision 8c0367082298658fc8e307bdb7aec82f7fd1986e)
++++ b/health_data.py	(date 1767403478640)
+@@ -1,39 +1,36 @@
+-# dictionaries moved here
+-meal_tracker = {}
+-workout_tracker = {}
++from models.DateEntity import Day
++from models.CalorieEntity import Meal, Workout
++from datetime import date
+ 
+-# ADDING ENTRIES
++# Using a dictionary to store Day objects
++health_data = {}
+ 
+-def add_meal(meal_date, meal):
+-    if meal_date in meal_tracker:
+-        return False
++# Adding Day
++def add_day(day_date: date):
++    if day_date in health_data:
++        return None
++    new_day = Day(day_date)
++    health_data[day_date] = new_day
++    return new_day
+ 
+-    meal_tracker[meal_date] = meal
+-    return True
+-
+-
+-def add_workout(workout_date, workout):
+-    if workout_date in workout_tracker:
+-        return False
++# Adding Entries
++def add_meal(meal_date: date, meal: Meal):
++    if meal_date in health_data:
++        day = health_data[meal_date]
++        day.add_meal(meal)
++        return True
++    return False
+ 
+-    workout_tracker[workout_date] = workout
+-    return True
+-
+-
+-# SEARCHING ENTRIES
+-
+-def get_meal(meal_date):
+-    if meal_date in meal_tracker:
+-        return meal_tracker[meal_date]
+-    return None
++def add_workout(workout_date: date, workout: Workout):
++    if workout_date in health_data:
++        day = health_data[workout_date]
++        day.add_workout(workout)
++        return True
++    return False
+ 
+-
+-def get_workout(workout_date):
+-    if workout_date in workout_tracker:
+-        return workout_tracker[workout_date]
++# Searching Entries
++def get_day(entry_date: date):
++    if entry_date in health_data:
++        return health_data[entry_date]
+     return None
+ 
+-
+-# optional helper
+-def get_entry(entry_date):
+-    return get_meal(entry_date), get_workout(entry_date)
+Index: input_util.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from datetime import date\n\n# INTEGER VALIDATION\n\ndef get_int(num):\n    try:\n        return int(num)\n    except:\n        return None\n\n\ndef get_int_range(num, low, high):\n    value = get_int(num)\n\n    if value is None:\n        return None\n\n    if value < low or value > high:\n        return None\n\n    return value\n\n\n# DATE VALIDATION\n\ndef get_date(str_date):\n    # Format check: MM/DD/YYYY -> must be length 10 & slashes at 2 and 5\n    if len(str_date) != 10 or str_date[2] != \"/\" or str_date[5] != \"/\":\n        return None\n\n    parts = str_date.split(\"/\")\n\n    if len(parts) != 3:\n        return None\n\n    month = get_int(parts[0])\n    day = get_int(parts[1])\n    year = get_int(parts[2])\n\n    if month is None or day is None or year is None:\n        return None\n\n    try:\n        return date(year, month, day)\n    except:\n        return None\n\n\nif __name__ == \"__main__\":\n    pass\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/input_util.py b/input_util.py
+--- a/input_util.py	(revision 8c0367082298658fc8e307bdb7aec82f7fd1986e)
++++ b/input_util.py	(date 1767403478642)
+@@ -1,6 +1,6 @@
+ from datetime import date
+ 
+-# INTEGER VALIDATION
++# Integer Validation
+ 
+ def get_int(num):
+     try:
+@@ -21,10 +21,10 @@
+     return value
+ 
+ 
+-# DATE VALIDATION
++# Date Validation
+ 
+ def get_date(str_date):
+-    # Format check: MM/DD/YYYY -> must be length 10 & slashes at 2 and 5
++    # Format check: MM/DD/YYYY must be length 10 and slashes at 2 and 5
+     if len(str_date) != 10 or str_date[2] != "/" or str_date[5] != "/":
+         return None
+ 
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>'''\n    INFO 1501 - Python I\n    Welcome to the Health and Wellness System\n    You will be working on this throughout the course and adding to it\n\n    Please read instructions for each assignment clearly and don't go beyond the functionality\n    required as we will be adding more each week.\n\n    Make sure to merge branches and create new branches for each week's assignment.\n'''\n\n# This is the UI for the Health and Wellness system\n\n# global dictionaries for meal and workout\n# keys are date - in string format - for now\nmealTracker = {}\nworkoutTracker = {}\n\nfrom input_util import *\nimport health_data as db\n\n\n# INPUT HELPERS\n\ndef prompt_int(prompt):\n    while True:\n        value = get_int(input(prompt))\n\n        if value is not None:\n            return value\n\n        print(\"Error, enter a valid number.\")\n\n\ndef prompt_int_range(prompt, low, high):\n    while True:\n        value = get_int_range(input(prompt), low, high)\n\n        if value is not None:\n            return value\n\n        print(f\"Error, enter a valid number between {low} and {high}.\")\n\n\ndef prompt_date(prompt):\n    while True:\n        value = get_date(input(prompt))\n\n        if value is not None:\n            return value\n\n        print(\"Error, enter a valid date.\")\n\n\n# FEATURE FUNCTIONS\n\ndef add_meal():\n    print(\"## Add Meal Entry ##\")\n    meal_date = prompt_date(\"Enter date of meal(MM/DD/YYYY): \")\n    items = input(\"Enter item details: \")\n    calories = prompt_int(\"Enter calories: \")\n\n    if db.add_meal(meal_date, {\"items\": items, \"calories\": calories}):\n        print(\"* Entry added in.\")\n    else:\n        print(\"Error, date entry already added in, try modifying it.\")\n\n\ndef add_workout():\n    print(\"## Add Workout Information ##\")\n    workout_date = prompt_date(\"Enter date of workout(MM/DD/YYYY): \")\n    details = input(\"Enter workout details: \")\n    burned = prompt_int(\"Enter calories burned: \")\n\n    if db.add_workout(workout_date, {\"details\": details, \"calories\": burned}):\n        print(\"* Workout added in.\")\n    else:\n        print(\"Error, workout already added in, modify if needed.\")\n\n\ndef search_date():\n    print(\"## Search for Entry ##\")\n    search_date = prompt_date(\"Enter date to search(MM/DD/YYYY): \")\n\n    meal = db.get_meal(search_date)\n    workout = db.get_workout(search_date)\n\n    print(\"\\nMeals:\")\n    if meal is None:\n        print(\"None\")\n        meal_cal = 0\n    else:\n        print(\"Meal Items:\", meal[\"items\"])\n        print(\"Meal Calories:\", meal[\"calories\"])\n        meal_cal = meal[\"calories\"]\n\n    print(\"\\nWorkout:\")\n    if workout is None:\n        print(\"None\")\n        workout_cal = 0\n    else:\n        print(\"Details:\", workout[\"details\"])\n        print(\"Calories Burned:\", workout[\"calories\"])\n        workout_cal = workout[\"calories\"]\n\n    difference = meal_cal - workout_cal\n    print(f\"\\nCalorie Difference: {difference:+}\")\n\n\n# MAIN LOOP\n\ndef main():\n    while True:\n        print(\"\\n### Health and Wellness App ###\")\n        print(\"1. Add Meal\")\n        print(\"2. Add Workout\")\n        print(\"3. Search Date\")\n        print(\"4. Exit\")\n\n        choice = prompt_int_range(\"Choose operation: \", 1, 4)\n\n        if choice == 1:\n            add_meal()\n        elif choice == 2:\n            add_workout()\n        elif choice == 3:\n            search_date()\n        elif choice == 4:\n            print(\"System Exiting...\")\n            break\n\n\nif __name__ == \"__main__\":\n    main()
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.py b/main.py
+--- a/main.py	(revision 8c0367082298658fc8e307bdb7aec82f7fd1986e)
++++ b/main.py	(date 1767403478645)
+@@ -10,105 +10,84 @@
+ '''
+ 
+ # This is the UI for the Health and Wellness system
+-
+-# global dictionaries for meal and workout
+-# keys are date - in string format - for now
+-mealTracker = {}
+-workoutTracker = {}
+-
+ from input_util import *
+ import health_data as db
+-
+-
+-# INPUT HELPERS
++from models.CalorieEntity import Meal, Workout
+ 
+ def prompt_int(prompt):
+     while True:
+         value = get_int(input(prompt))
+-
+         if value is not None:
+             return value
+-
+         print("Error, enter a valid number.")
+ 
+-
+ def prompt_int_range(prompt, low, high):
+     while True:
+         value = get_int_range(input(prompt), low, high)
+-
+         if value is not None:
+             return value
+-
+         print(f"Error, enter a valid number between {low} and {high}.")
+ 
+-
+ def prompt_date(prompt):
+     while True:
+         value = get_date(input(prompt))
+-
+         if value is not None:
+             return value
+-
+         print("Error, enter a valid date.")
+ 
+-
+-# FEATURE FUNCTIONS
+-
++# Function will be added next time
+ def add_meal():
+     print("## Add Meal Entry ##")
+     meal_date = prompt_date("Enter date of meal(MM/DD/YYYY): ")
++
++    # Managing day, if does not exist create it
++    day = db.get_day(meal_date)
++    if day is None:
++        day = db.add_day(meal_date)
++
+     items = input("Enter item details: ")
+     calories = prompt_int("Enter calories: ")
+ 
+-    if db.add_meal(meal_date, {"items": items, "calories": calories}):
++    # Creating Meal object
++    meal = Meal(items, calories)
++
++    if db.add_meal(meal_date, meal):
+         print("* Entry added in.")
+     else:
+-        print("Error, date entry already added in, try modifying it.")
+-
++        print("Error, could not add meal.")
+ 
+ def add_workout():
+     print("## Add Workout Information ##")
+     workout_date = prompt_date("Enter date of workout(MM/DD/YYYY): ")
++
++    day = db.get_day(workout_date)
++    if day is None:
++        day = db.add_day(workout_date)
++
+     details = input("Enter workout details: ")
+     burned = prompt_int("Enter calories burned: ")
+ 
+-    if db.add_workout(workout_date, {"details": details, "calories": burned}):
++    # Creating Workout object
++    workout = Workout(details, burned)
++
++    if db.add_workout(workout_date, workout):
+         print("* Workout added in.")
+     else:
+-        print("Error, workout already added in, modify if needed.")
+-
++        print("Error, could not add workout.")
+ 
+ def search_date():
+     print("## Search for Entry ##")
+     search_date = prompt_date("Enter date to search(MM/DD/YYYY): ")
+ 
+-    meal = db.get_meal(search_date)
+-    workout = db.get_workout(search_date)
++    day = db.get_day(search_date)
+ 
+-    print("\nMeals:")
+-    if meal is None:
+-        print("None")
+-        meal_cal = 0
++    if day is None:
++        print("\nSorry, no date information found.")
+     else:
+-        print("Meal Items:", meal["items"])
+-        print("Meal Calories:", meal["calories"])
+-        meal_cal = meal["calories"]
+-
+-    print("\nWorkout:")
+-    if workout is None:
+-        print("None")
+-        workout_cal = 0
+-    else:
+-        print("Details:", workout["details"])
+-        print("Calories Burned:", workout["calories"])
+-        workout_cal = workout["calories"]
+-
+-    difference = meal_cal - workout_cal
+-    print(f"\nCalorie Difference: {difference:+}")
+-
++        print()
++        print(day)
+ 
+-# MAIN LOOP
+-
++# Main Loop
+ def main():
+     while True:
+         print("\n### Health and Wellness App ###")
+@@ -129,6 +108,5 @@
+             print("System Exiting...")
+             break
+ 
+-
+ if __name__ == "__main__":
+     main()
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"62e34c44-4271-40ef-8122-f913a4518a78\" name=\"Changes\" comment=\"\" />\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"ProjectColorInfo\"><![CDATA[{\n  \"associatedIndex\": 7\n}]]></component>\n  <component name=\"ProjectId\" id=\"375emSXkxMmFpGCutR6n4uCN5uR\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\"><![CDATA[{\n  \"keyToString\": {\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\"\n  }\n}]]></component>\n  <component name=\"SharedIndexes\">\n    <attachedChunks>\n      <set>\n        <option value=\"bundled-python-sdk-a101402ee41c-968fe969f28a-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.28238.29\" />\n      </set>\n    </attachedChunks>\n  </component>\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"62e34c44-4271-40ef-8122-f913a4518a78\" name=\"Changes\" comment=\"\" />\n      <created>1766197517452</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1766197517452</updated>\n    </task>\n    <servers />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 8c0367082298658fc8e307bdb7aec82f7fd1986e)
++++ b/.idea/workspace.xml	(date 1767403478647)
+@@ -1,15 +1,72 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="AutoImportSettings">
++    <option name="autoReloadType" value="SELECTIVE" />
++  </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="62e34c44-4271-40ef-8122-f913a4518a78" name="Changes" comment="" />
++    <list default="true" id="62e34c44-4271-40ef-8122-f913a4518a78" name="Changes" comment="Assignment2">
++      <change afterPath="$PROJECT_DIR$/models/CalorieEntities.py" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/models/DayEntity.py" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/models/__init__.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/health_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/health_data.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/input_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/input_util.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/main (1).py" beforeDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+     <option name="LAST_RESOLUTION" value="IGNORE" />
+   </component>
+-  <component name="ProjectColorInfo"><![CDATA[{
+-  "associatedIndex": 7
+-}]]></component>
++  <component name="FileTemplateManagerImpl">
++    <option name="RECENT_TEMPLATES">
++      <list>
++        <option value="Python Script" />
++      </list>
++    </option>
++  </component>
++  <component name="Git.Settings">
++    <favorite-branches>
++      <branch-storage>
++        <map>
++          <entry type="LOCAL">
++            <value>
++              <list>
++                <branch-info repo="$PROJECT_DIR$" source="Assignment2" />
++              </list>
++            </value>
++          </entry>
++        </map>
++      </branch-storage>
++    </favorite-branches>
++    <option name="PUSH_TAGS">
++      <GitPushTagMode>
++        <option name="argument" value="--tags" />
++        <option name="title" value="All" />
++      </GitPushTagMode>
++    </option>
++    <option name="RECENT_BRANCH_BY_REPOSITORY">
++      <map>
++        <entry key="$PROJECT_DIR$" value="Assignment2" />
++      </map>
++    </option>
++    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
++  </component>
++  <component name="GitHubPullRequestSearchHistory">{
++  &quot;lastFilter&quot;: {
++    &quot;state&quot;: &quot;OPEN&quot;,
++    &quot;assignee&quot;: &quot;Sadoukou369&quot;
++  }
++}</component>
++  <component name="GithubPullRequestsUISettings">{
++  &quot;selectedUrlAndAccountId&quot;: {
++    &quot;url&quot;: &quot;https://github.com/Sadoukou369/Assignments_WellnessAppProject.git&quot;,
++    &quot;accountId&quot;: &quot;75c181a8-1601-4c42-92b6-673cb593415a&quot;
++  }
++}</component>
++  <component name="ProjectColorInfo">{
++  &quot;associatedIndex&quot;: 7
++}</component>
+   <component name="ProjectId" id="375emSXkxMmFpGCutR6n4uCN5uR" />
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+@@ -17,9 +74,24 @@
+   </component>
+   <component name="PropertiesComponent"><![CDATA[{
+   "keyToString": {
+-    "RunOnceActivity.ShowReadmeOnStart": "true"
++    "ModuleVcsDetector.initialDetectionPerformed": "true",
++    "Python.main (1).executor": "Run",
++    "Python.main.executor": "Run",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "RunOnceActivity.git.unshallow": "true",
++    "git-widget-placeholder": "master",
++    "last_opened_file_path": "/Users/kagambegasadoukou/Desktop/25WI_INFO_1501_WW /M1PythonProject Assignment_Wellness_App"
+   }
+ }]]></component>
++  <component name="RecentsManager">
++    <key name="CopyFile.RECENT_KEYS">
++      <recent name="$PROJECT_DIR$" />
++    </key>
++    <key name="MoveFile.RECENT_KEYS">
++      <recent name="$PROJECT_DIR$/.venv" />
++      <recent name="$PROJECT_DIR$/models" />
++    </key>
++  </component>
+   <component name="SharedIndexes">
+     <attachedChunks>
+       <set>
+@@ -35,6 +107,70 @@
+       <option name="presentableId" value="Default" />
+       <updated>1766197517452</updated>
+     </task>
++    <task id="LOCAL-00001" summary="Project Setup.">
++      <option name="closed" value="true" />
++      <created>1766197732472</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1766197732472</updated>
++    </task>
++    <task id="LOCAL-00002" summary="Main Menu Setup">
++      <option name="closed" value="true" />
++      <created>1766198115634</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1766198115634</updated>
++    </task>
++    <task id="LOCAL-00003" summary="Initial code setup.">
++      <option name="closed" value="true" />
++      <created>1766202246858</created>
++      <option name="number" value="00003" />
++      <option name="presentableId" value="LOCAL-00003" />
++      <option name="project" value="LOCAL" />
++      <updated>1766202246858</updated>
++    </task>
++    <task id="LOCAL-00004" summary="Initial code setup.">
++      <option name="closed" value="true" />
++      <created>1766972603851</created>
++      <option name="number" value="00004" />
++      <option name="presentableId" value="LOCAL-00004" />
++      <option name="project" value="LOCAL" />
++      <updated>1766972603851</updated>
++    </task>
++    <task id="LOCAL-00005" summary="Initial code setup.">
++      <option name="closed" value="true" />
++      <created>1767294027852</created>
++      <option name="number" value="00005" />
++      <option name="presentableId" value="LOCAL-00005" />
++      <option name="project" value="LOCAL" />
++      <updated>1767294027852</updated>
++    </task>
++    <task id="LOCAL-00006" summary="Assignment2">
++      <option name="closed" value="true" />
++      <created>1767333473334</created>
++      <option name="number" value="00006" />
++      <option name="presentableId" value="LOCAL-00006" />
++      <option name="project" value="LOCAL" />
++      <updated>1767333473334</updated>
++    </task>
++    <task id="LOCAL-00007" summary="Assignment2">
++      <option name="closed" value="true" />
++      <created>1767391610564</created>
++      <option name="number" value="00007" />
++      <option name="presentableId" value="LOCAL-00007" />
++      <option name="project" value="LOCAL" />
++      <updated>1767391610565</updated>
++    </task>
++    <option name="localTasksCounter" value="8" />
+     <servers />
+   </component>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value="Project Setup." />
++    <MESSAGE value="Main Menu Setup" />
++    <MESSAGE value="Initial code setup." />
++    <MESSAGE value="Assignment2" />
++    <option name="LAST_COMMIT_MESSAGE" value="Assignment2" />
++  </component>
+ </project>
+\ No newline at end of file
+Index: models/CalorieEntity.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/models/CalorieEntity.py b/models/CalorieEntity.py
+new file mode 100644
+--- /dev/null	(date 1767403478650)
++++ b/models/CalorieEntity.py	(date 1767403478650)
+@@ -0,0 +1,50 @@
++class Meal:
++    def __init__(self, items: str, calories: int):
++        self.__items = items
++        self.__calories = calories
++
++    @property
++    def items(self) -> str:
++        return self.__items
++
++    @items.setter
++    def items(self, value: str):
++        self.__items = value
++
++    @property
++    def calories(self) -> int:
++        return self.__calories
++
++    @calories.setter
++    def calories(self, value: int):
++        if value > 0:
++            self.__calories = value
++
++    def __str__(self):
++        return f"Meal/Items: {self.__items}, Calories Consumed: {self.__calories}"
++
++
++class Workout:
++    def __init__(self, details: str, calories: int):
++        self.__details = details
++        self.__calories = calories
++
++    @property
++    def details(self) -> str:
++        return self.__details
++
++    @details.setter
++    def details(self, value: str):
++        self.__details = value
++
++    @property
++    def calories(self) -> int:
++        return self.__calories
++
++    @calories.setter
++    def calories(self, value: int):
++        if value > 0:
++            self.__calories = value
++
++    def __str__(self):
++        return f"Workout: {self.__details}, Calories Burned: {self.__calories}"
+\ No newline at end of file
+Index: models/DateEntity.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/models/DateEntity.py b/models/DateEntity.py
+new file mode 100644
+--- /dev/null	(date 1767403478651)
++++ b/models/DateEntity.py	(date 1767403478651)
+@@ -0,0 +1,89 @@
++from datetime import date
++from models.CalorieEntity import Meal, Workout
++
++
++class Day:
++    def __init__(self, day_date: date):
++        self.__date = day_date
++        self.__meals = []
++        self.__workouts = []
++
++    @property
++    def date(self) -> date:
++        return self.__date
++
++    @date.setter
++    def date(self, value: date):
++        self.__date = value
++
++    @property
++    def meals(self) -> list:
++        return self.__meals
++
++    @meals.setter
++    def meals(self, value: list):
++        self.__meals = value
++
++    @property
++    def workouts(self) -> list:
++        return self.__workouts
++
++    @workouts.setter
++    def workouts(self, value: list):
++        self.__workouts = value
++
++    def add_meal(self, meal: Meal):
++        self.__meals.append(meal)
++
++    def add_workout(self, workout: Workout):
++        self.__workouts.append(workout)
++
++    def meal_calories(self) -> int:
++        total = 0
++        for meal in self.__meals:
++            total += meal.calories
++        return total
++
++    def workout_calories(self) -> int:
++        total = 0
++        for workout in self.__workouts:
++            total += workout.calories
++        return total
++
++    @property
++    def net_calories(self) -> int:
++        return self.meal_calories() - self.workout_calories()
++
++    def __eq__(self, other) -> bool:
++        if isinstance(other, Day):
++            return self.__date == other.date
++        return False
++
++    def meals_to_string(self) -> str:
++        result = ""
++        for meal in self.__meals:
++            result += f"\t{meal}\n"
++        return result
++
++    def workouts_to_string(self) -> str:
++        result = ""
++        for workout in self.__workouts:
++            result += f"\t{workout}\n"
++        return result
++
++    def __str__(self):
++        result = f"Date: {self.__date}\n"
++        result += "Meals:\n"
++        if self.__meals:
++            result += self.meals_to_string()
++        else:
++            result += "\n"
++
++        result += "Workouts:\n"
++        if self.__workouts:
++            result += self.workouts_to_string()
++        else:
++            result += "\n"
++
++        result += f"Net Calories: {self.net_calories}"
++        return result
+\ No newline at end of file
+diff --git a/models/__init__.py b/models/__init__.py
+new file mode 100644
