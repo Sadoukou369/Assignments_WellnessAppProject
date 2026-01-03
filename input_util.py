@@ -1,6 +1,9 @@
+# input_util.py - Updated to match PDF error messages
 from datetime import date
+from models.EntryType import MealType, WorkoutType
 
-# Integer Validation
+
+# INTEGER VALIDATION
 
 def get_int(num):
     try:
@@ -21,10 +24,10 @@ def get_int_range(num, low, high):
     return value
 
 
-# Date Validation
+# DATE VALIDATION
 
 def get_date(str_date):
-    # Format check: MM/DD/YYYY must be length 10 and slashes at 2 and 5
+    # Format check: MM/DD/YYYY -> must be length 10 & slashes at 2 and 5
     if len(str_date) != 10 or str_date[2] != "/" or str_date[5] != "/":
         return None
 
@@ -46,5 +49,22 @@ def get_date(str_date):
         return None
 
 
-if __name__ == "__main__":
-    pass
+# ENUM INPUT HELPERS (matching PDF format)
+def prompt_meal_type():
+    """Prompt user to select a meal type - matches PDF format."""
+    print("Select Meal Type:")
+    meal_types = list(MealType)
+    for i, meal_type in enumerate(meal_types, 1):
+        print(f"{i}. {meal_type}")
+
+    return None  # Let main.py handle the input logic
+
+
+def prompt_workout_type():
+    """Prompt user to select a workout type - matches PDF format."""
+    print("Select Workout Type:")
+    workout_types = list(WorkoutType)
+    for i, workout_type in enumerate(workout_types, 1):
+        print(f"{i}. {workout_type}")
+
+    return None  # Let main.py handle the input logic

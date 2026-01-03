@@ -1,6 +1,7 @@
 from datetime import date
 from models.CalorieEntity import Meal, Workout
 
+
 class Day:
     def __init__(self, day_date: date):
         self.__date = day_date
@@ -72,17 +73,21 @@ class Day:
 
     def __str__(self):
         result = f"Date: {self.__date}\n"
-        result += "Meals:\n"
+
+        # Meals section
+        result += "Meals:\n\n"
         if self.__meals:
             result += self.meals_to_string()
         else:
             result += "\n"
 
-        result += "Workouts:\n"
+        # Workouts section
+        result += "Workouts:\n\n"
         if self.__workouts:
             result += self.workouts_to_string()
         else:
             result += "\n"
 
+        # Net calories
         result += f"Net Calories: {self.net_calories}"
         return result
