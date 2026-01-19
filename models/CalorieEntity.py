@@ -1,36 +1,58 @@
 from models.HealthEntry import HealthEntry
 from models.EntryType import MealType, WorkoutType
 
-class Meal(HealthEntry):
 
-    def init(self, description: str, calories: int, meal_type: MealType):
-        super().init(description, calories)
-        self. meal_type = meal_type
+class Meal(HealthEntry):
+    """Represents a meal entry with type classification."""
+
+    def __init__(self, description: str, calories: int, meal_type: MealType):
+        """Initialize meal with type."""
+        super().__init__(description, calories)
+        # Use property setter for validation
+        self.meal_type = meal_type
 
     @property
     def meal_type(self) -> MealType:
+        """Get the meal type."""
         return self.__meal_type
 
     @meal_type.setter
-    def meal_type(self, value: MealType):
-        self.meal_type = value
+    def meal_type(self, value):
+        """Set the meal type with validation."""
+        if isinstance(value, MealType):
+            self.__meal_type = value
+        else:
+            # Default to SNACK if invalid type
+            self.__meal_type = MealType.SNACK
 
-    def str(self) -> str:
+    def __str__(self) -> str:
+        """Format exactly like the PDF example."""
         return f"Entry: {self._description}, Calories: {self._calories}, Type: {self.__meal_type}"
 
-class Workout(HealthEntry):
 
-    def init(self, description: str, calories: int, workout_type: WorkoutType):
-        super().init(description, calories)
+class Workout(HealthEntry):
+    """Represents a workout entry with type classification."""
+
+    def __init__(self, description: str, calories: int, workout_type: WorkoutType):
+        """Initialize workout with type."""
+        super().__init__(description, calories)
+        # Use property setter for validation
         self.workout_type = workout_type
 
     @property
     def workout_type(self) -> WorkoutType:
-        return self.workout_type
+        """Get the workout type."""
+        return self.__workout_type
 
     @workout_type.setter
-    def workout_type(self, value: WorkoutType):
-        self.workout_type = value
+    def workout_type(self, value):
+        """Set the workout type with validation."""
+        if isinstance(value, WorkoutType):
+            self.__workout_type = value
+        else:
+            # Default to OTHER if invalid type
+            self.__workout_type = WorkoutType.OTHER
 
-    def str(self) -> str:
-        return f"Entry: {self._description}, Calories: {self._calories}, Type: {self.workout_type}"
+    def __str__(self) -> str:
+        """Format exactly like the PDF example."""
+        return f"Entry: {self._description}, Calories: {self._calories}, Type: {self.__workout_type}"

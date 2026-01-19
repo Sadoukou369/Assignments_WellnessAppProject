@@ -28,7 +28,8 @@ class HealthEntry:
         if value > 0:
             self._calories = value
         else:
-            raise ValueError("Calories must be greater than 0")
+            # Set to 0 for invalid values (to avoid uninitialized variable)
+            self._calories = 0
 
     def __str__(self) -> str:
         """String representation - to be overridden by subclasses."""
