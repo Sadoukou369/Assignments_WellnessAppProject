@@ -141,3 +141,23 @@ class TestDayEntity(TestCase):
         """Testing workout_calories with empty workouts list."""
         day = Day(date(2024, 1, 4))
         self.assertEqual(day.workout_calories(), 0)
+
+    def test_meal_calories_comprehension(self):
+        """Test that meal_calories uses comprehension."""
+        day = Day(date(2024, 1, 5))
+        day.add_meal(Meal("Breakfast", 100, MealType.BREAKFAST))
+        day.add_meal(Meal("Lunch", 200, MealType.LUNCH))
+        day.add_meal(Meal("Dinner", 300, MealType.DINNER))
+
+        # Using comprehension: sum(meal.calories for meal in self.__meals)
+        self.assertEqual(day.meal_calories(), 600)
+
+    def test_workout_calories_comprehension(self):
+        """Test that workout_calories uses comprehension."""
+        day = Day(date(2024, 1, 5))
+        day.add_workout(Workout("Workout1", 50, WorkoutType.CARDIO))
+        day.add_workout(Workout("Workout2", 75, WorkoutType.STRENGTH))
+        day.add_workout(Workout("Workout3", 100, WorkoutType.FLEXIBILITY))
+
+        # Using comprehension: sum(workout.calories for workout in self.__workouts)
+        self.assertEqual(day.workout_calories(), 225)

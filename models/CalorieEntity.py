@@ -1,3 +1,4 @@
+# models/CalorieEntity.py - Ensure exact formatting
 from models.HealthEntry import HealthEntry
 from models.EntryType import MealType, WorkoutType
 
@@ -26,7 +27,7 @@ class Meal(HealthEntry):
             self.__meal_type = MealType.SNACK
 
     def __str__(self) -> str:
-        """Format exactly like the PDF example."""
+        """Format exactly like the example: Entry: Eggs + toast, Calories: 410, Type: Breakfast"""
         return f"Entry: {self._description}, Calories: {self._calories}, Type: {self.__meal_type}"
 
 
@@ -54,5 +55,5 @@ class Workout(HealthEntry):
             self.__workout_type = WorkoutType.OTHER
 
     def __str__(self) -> str:
-        """Format exactly like the PDF example."""
+        """Format exactly like the example: Entry: Morning walk, Calories: 200, Type: Cardio"""
         return f"Entry: {self._description}, Calories: {self._calories}, Type: {self.__workout_type}"

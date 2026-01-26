@@ -39,16 +39,14 @@ class Day:
         self.__workouts.append(workout)
 
     def meal_calories(self) -> int:
-        total = 0
-        for meal in self.__meals:
-            total += meal.calories
-        return total
+        """Calculate total meal calories using comprehension."""
+        # Using comprehension with sum() function
+        return sum(meal.calories for meal in self.__meals)
 
     def workout_calories(self) -> int:
-        total = 0
-        for workout in self.__workouts:
-            total += workout.calories
-        return total
+        """Calculate total workout calories using comprehension."""
+        # Using comprehension with sum() function
+        return sum(workout.calories for workout in self.__workouts)
 
     @property
     def net_calories(self) -> int:
